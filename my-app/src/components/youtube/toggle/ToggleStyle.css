@@ -1,0 +1,25 @@
+.toggle{
+    width: 100px;
+    height: 40px;
+    background-color: rgb(163, 151, 151);
+    padding: 5px;
+    margin: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .2s linear;
+}
+.sprint{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: rgb(245, 227, 227);
+    transition: all .2s linear;
+}
+
+.toggle.active{
+    background-color: aqua;
+}
+
+.sprint.active{
+    transform: translateX(60px);
+}
