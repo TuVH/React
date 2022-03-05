@@ -1,11 +1,10 @@
 import "./App.css";
-import Toggle from "./components/youtube/toggle/Toggle";
-import YoutubeList from "./components/youtube/YoutubeList";
+import Toggle from "./components/toggle/Toggle";
+import Game from "./components/tictagtoe/Game";
 
 function App() {
-  
   return (
-    <Toggle></Toggle>
+    <Game></Game>
   );
 }
 
