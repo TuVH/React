@@ -1,30 +1,71 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { Winner } from "../../Helper";
 import Board from "./Board";
 
-const Game = () => {
-  //const xxx = ["x", "x", "x", null, null, null, null, null, null];
-  const [board, setBoard] = useState(Array(9).fill(null)); // array 9 phan tử null
-  const [isNext,setIsNext] = useState(true); // true false (bool)
-  const isWinner = Winner(board); //param = array
-  const handleFunction = (index) => {
-    const boardCopy = [...board];
-    if (isWinner || boardCopy[index]) {
-      return
+const initialState = {
+  board: Array(9).fill(null),
+  isNext: true,
+};
+const gameReducer = (state, action) => {
+  switch (action.type.toLowerCase()) {
+    case "click": {
+      const { board, isNext } = state;
+      const { index, winner } = action.payload;
+      if (winner || board[index]) {
+        console.log(state);
+        return state;
+      }
+      const nextState = JSON.parse(JSON.stringify(state));
+      nextState.board[index] = isNext ? "X" : "0";
+      nextState.isNext = !isNext;
+      console.log("nextState", nextState);
+      return nextState;
     }
-    boardCopy[index] = isNext ? 'X' : '0';
-    setBoard(boardCopy)
-    setIsNext(!isNext)
+    case "reset": {
+      const nextState = JSON.parse(JSON.stringify(state));
+      nextState.board = Array(9).fill(null)
+      nextState.isNext = true;
+      console.log("nextState", nextState);
+      return nextState;
+    }
+    default:
+      console.log("error")
+      break;
+  }
+};
+
+const Game = () => {
+  const [state, dispatch] = useReducer(gameReducer, initialState);
+  const isWinner = Winner(state.board);
+
+  const handleFunction = (index) => {
+    //const boardCopy = [...state.board];
+    dispatch({
+      type: "Click",
+      payload: {
+        index: index,
+        winner: isWinner,
+      },
+    });
+    //boardCopy[index] = isNext ? "X" : "0";
+    //setBoard(boardCopy);
+    //setIsNext(!isNext);
   };
   const resetGame = () => {
-    setBoard(Array(9).fill(null))
-  }
+    dispatch({
+      type: "Reset",
+      payload: {
+        winner: isWinner,
+      },
+    });
+    //setBoard(Array(9).fill(null));
+  };
   return (
     <div>
-      <Board cells={board} onClick={handleFunction}></Board>
+      <Board cells={state.board} onClick={handleFunction}></Board>
       <button onClick={resetGame}>Reset Game</button>
       <hr />
-      {isWinner ? `winner is ${isWinner}` :""}
+      {isWinner ? `winner is ${isWinner}` : ""}
     </div>
   );
 };

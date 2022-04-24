@@ -1,10 +1,12 @@
 import "./App.css";
-import Toggle from "./components/toggle/Toggle";
-import Game from "./components/tictagtoe/Game";
+import Card from "./components/card/Card";
+import Photos from "./components/photo/Photos";
 
 function App() {
   return (
-    <Game></Game>
+    <Photos></Photos>
+    //<Card>Primary</Card>
+    //<Game></Game>
   );
 }
 
