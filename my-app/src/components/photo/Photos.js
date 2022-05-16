@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 const getRandomPhotos = async (pages) => {
   try {
-    const response = await axios
-      .get(`https://picsum.photos/v2/list?page=${pages}&limit=10`);
+    const response = await axios.get(
+      `https://picsum.photos/v2/list?page=${pages}&limit=10`
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -15,17 +16,18 @@ const Photos = () => {
   const [randomPhotos, setRandomPhotos] = useState([]);
   const [nextPages, setNextPages] = useState(1);
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = useRef({});
+  handleLoadMore.current = async () => {
     const photos = await getRandomPhotos(nextPages);
-    const newPhotos = [...randomPhotos, ...photos]
+    const newPhotos = [...randomPhotos, ...photos];
     setRandomPhotos(newPhotos);
-    setNextPages(nextPages+1);
-  }
+    setNextPages(nextPages + 1);
+  };
 
   useEffect(() => {
     //side-effects
-    handleLoadMore();
-  }, []);
+    handleLoadMore.current();
+  }, [handleLoadMore]);
 
   return (
     <div>
@@ -45,7 +47,12 @@ const Photos = () => {
           ))}
       </div>
       <div className="text-center">
-        <button className="inline-block px-8 py-4 bg-purple-600 text-white rounded-lg" onClick={handleLoadMore}>Load more</button>
+        <button
+          className="inline-block px-8 py-4 bg-purple-600 text-white rounded-lg"
+          onClick={handleLoadMore.current}
+        >
+          Load more
+        </button>
       </div>
     </div>
   );
