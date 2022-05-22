@@ -1,11 +1,11 @@
 import "./App.css";
 //import Card from "./components/card/Card";
-import HackerNews from "./components/news/HackerNews.js";
+import HackerNewsWithReducer from "./components/news/HackerNewsWithReducer.js";
 //import Photos from "./components/photo/Photos";
 
 function App() {
   return (
-      <HackerNews></HackerNews>
+      <HackerNewsWithReducer></HackerNewsWithReducer>
     //<Card>Primary</Card>
     //<Game></Game>
   );
