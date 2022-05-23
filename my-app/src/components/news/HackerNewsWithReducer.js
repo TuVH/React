@@ -95,7 +95,7 @@ const HackerNewsWithReducer = () => {
             opacity: state.loading ? "0.25" : "1",
           }}
         >
-          fetching...
+          fetching....
         </button>
       </div>
       {state.loading && (
