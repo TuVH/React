@@ -1,11 +1,12 @@
 
 import "./App.css";
-import HackerNewsWithCustomHook from "./components/news/HackerNewsWithCustomHook.js";
+import Form from "./components/form/Form";
+//import HackerNewsWithCustomHook from "./components/news/HackerNewsWithCustomHook.js";
 
 
 function App() {
   return (
-    <HackerNewsWithCustomHook></HackerNewsWithCustomHook>
+    <Form></Form>
   );
 }
 
