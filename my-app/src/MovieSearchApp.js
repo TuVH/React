@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 //url https://api.themoviedb.org/3/movie/550?api_key=0ad4c4f3f5061eb793e10a42eb32b426
 import axios from "axios";
+import useDebounce from "./components/hook/useDebounce";
+import LoadingSkeleton from "./components/loading/LoadingSkeleton";
 const MovieSearchApp = () => {
   const [movies, setMovies] = useState([]);
   const [query, setQuery] = useState("");
+  const queryDebounce = useDebounce(query, 500);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=0ad4c4f3f5061eb793e10a42eb32b426&query='${query}'`
+        `https://api.themoviedb.org/3/search/movie?api_key=0ad4c4f3f5061eb793e10a42eb32b426&query='${queryDebounce}'`
       );
       if (response.data.results) {
+        setLoading(false);
         setMovies(response.data.results);
       }
     }
     fetchData();
-  }, [query]);
+  }, [queryDebounce]);
   return (
     <div className="p-10">
       <div className="w-full max-w-[500px] mx-auto mb-20">
@@ -25,35 +31,49 @@ const MovieSearchApp = () => {
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
+      {loading && (
+        <div className="grid grid-cols-3 gap-10">
+          <MovieLoadingItem></MovieLoadingItem>
+          <MovieLoadingItem></MovieLoadingItem>
+          <MovieLoadingItem></MovieLoadingItem>
+          <MovieLoadingItem></MovieLoadingItem>
+          <MovieLoadingItem></MovieLoadingItem>
+          <MovieLoadingItem></MovieLoadingItem>
+        </div>
+      )}
       <div className="grid grid-cols-3 gap-10">
         {movies.length > 0 &&
-          movies.map((item, index) => 
+          !loading &&
+          movies.map((item, index) => (
             <MovieItem key={item.id} data={item}></MovieItem>
-          )}
+          ))}
       </div>
     </div>
   );
 };
 
-/**
- * adult: false
-backdrop_path: "/t2F7D7NfbdAk2vhkfAE8N1NJNxH.jpg"
-genre_ids: (2) [18, 10749]
-id: 408508
-original_language: "en"
-original_title: "Blue Jay"
-overview: "Meeting by chance when they return to their tiny California hometown, two former high-school sweethearts reflect on their shared past."
-popularity: 6.732
-poster_path: "/o5hdBcCUHRTnav6KVwtowZkYVZp.jpg"
-release_date: "2016-10-07"
-title: "Blue Jay"
-video: false
-vote_average: 7
-vote_count: 369
-img ::: https://image.tmdb.org/t/p/w500/kqjL17yufvn9OVLyXYpvtyrFfak.jpg
- */
 
-const MovieItem = ({data}) => {
+const MovieLoadingItem = () => {
+  return (
+    <div className="bg-white p-3 rounded-2x1 shadow-sm">
+      <div className="h-[297px]">
+        <LoadingSkeleton height="100%"></LoadingSkeleton>
+      </div>
+      <div className="p-7">
+        <h3 className="text-xl font-semibold mb-4">
+          <LoadingSkeleton height="20px"></LoadingSkeleton>
+        </h3>
+        <p className="text-[#999] text-sm mb-6 !leading-loose">
+          <LoadingSkeleton height="10px" marginBottom="5px"></LoadingSkeleton>
+          <LoadingSkeleton height="10px" marginBottom="5px"></LoadingSkeleton>
+          <LoadingSkeleton height="10px" marginBottom="5px"></LoadingSkeleton>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const MovieItem = ({ data }) => {
   return (
     <div className="bg-white p-3 rounded-2x1 shadow-sm">
       <div className="h-[297px]">
